@@ -1,0 +1,7 @@
+docker network create dev-vn-networks
+
+docker network ls
+docker network inspect dev-vn-networks
+
+docker build . -t tn-portal-img:1.0.0 --no-cache
+docker-compose up --build

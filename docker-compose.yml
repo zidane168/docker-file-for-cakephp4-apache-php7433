@@ -1,0 +1,33 @@
+version: '3'
+services:
+    tn-portal:
+        networks:
+            - vi-web
+        ports:
+            - '8080:80' 
+        container_name: tn-portal
+        restart: always
+        labels:
+            - "traefik.docker.network=dev-vn-networks"
+            - "traefik.enable=true"
+            - "traefik.basic.frontend.rule=Host:tn-portal.vtl-lab.com"
+            - "traefik.basic.port=80"
+            - "traefik.basic.protocol=http"
+        volumes:
+            - './www:/var/www/localhost/htdocs'
+            - './config/apache2/httpd.conf:/etc/apache2/httpd.conf'
+            - './config/apache2/conf.d:/etc/apache2/conf.d'
+            - './config/php7/php.ini:/etc/php7/php.ini'
+            - './log/apache2:/var/log/apache2'
+            - './log/php7:/var/log/php7'
+        image: tn-portal-img:1.0.0 
+        external_links: 
+            - mysql:mysql-8.0
+        deploy:
+            resources:
+                limits:
+                    cpus: '0.5'
+                    memory: 512M     
+networks:
+    vi-web:
+        external: true
